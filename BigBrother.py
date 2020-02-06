@@ -2,20 +2,28 @@ import os
 import hashlib
 import zipfile
 import time
+import json
 
-def getFile(path,rlist):
+'''
+libBigBrother version 0.0.1
+By icbmicbm
+libBigBrother is the library needed by Project BigBrother.
+'''
+
+
+def getFile(path, rlist):
     files = os.listdir(path)
     for file in files:
-        if os.path.isdir(os.path.join(path,file)):
-            getFile(os.path.join(path,file),rlist)
+        if os.path.isdir(os.path.join(path, file)):
+            getFile(os.path.join(path, file), rlist)
         else:
-            rlist.append(os.path.join(path,file))
+            rlist.append(os.path.join(path, file))
     return rlist
 
 
 def getFileList(path):
     rlist = []
-    getFile(path,rlist)
+    getFile(path, rlist)
     return rlist
 
 
@@ -28,23 +36,57 @@ def md5Sum(file):
     return file_md5
 
 
-def getMD5List(rlist):
+def getmd5List(rlist):
     md5list = {}
     for i in rlist:
-        md5list[i]=md5Sum(i)
+        md5list[i] = md5Sum(i)
     return md5list
+
+
+def savemd5List(md5list):
+    dump = json.dumps(md5list)
+    try:
+        md5file = open(".md5list.txt", "a")
+        md5file.write(dump)
+        md5file.close()
+    except:
+        print("error saving md5 list")
+
+
+def readmd5List(file):
+    try:
+        md5list = open(file, "r")
+        md5list = json.loads(md5list)
+        return md5list
+    except:
+        print("error reading md5 list")
 
 
 def getCompressed(rlist):
     for i in rlist:
         i = os.path.basename(i)
 
-    compressed = zipfile.ZipFile(str(time.time())+".zip",mode="w")
+    compressed = zipfile.ZipFile(str(time.time()) + ".zip", mode="w")
     for i in rlist:
         try:
-            compressed.write(i,compress_type=zipfile.ZIP_DEFLATED)
+            compressed.write(i, compress_type=zipfile.ZIP_DEFLATED)
         except:
-            print("error handling "+i)
+            print("error handling " + i)
             break
     compressed.close()
-print(getMD5List(getFileList("/Users/icbm/Desktop/BigBrother")))
+
+
+def md5Check(md5list, path):
+    rlist = []
+    checklist = getFileList(path)
+    originlist = md5list
+    newlist = getmd5List(checklist)
+    for i in checklist:
+        if originlist[i] == newlist[i]:
+            continue
+        elif originlist[i] != newlist[i]:
+            rlist.append(i)
+    return rlist
+
+
+def recovery()
