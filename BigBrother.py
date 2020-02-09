@@ -63,11 +63,11 @@ def readmd5List(file):
         print("error reading md5 list")
 
 
-def getCompressed(rlist):
+def getCompressed(rlist, outpath):
     for i in rlist:
         i = os.path.basename(i)
-
-    compressed = zipfile.ZipFile(str(time.time()) + ".zip", mode="w")
+    filepath = outpath + str(time.time()) + ".zip"
+    compressed = zipfile.ZipFile(filepath, mode="w")
     for i in rlist:
         try:
             compressed.write(i, compress_type=zipfile.ZIP_DEFLATED)
@@ -75,6 +75,7 @@ def getCompressed(rlist):
             print("error handling " + i)
             break
     compressed.close()
+    return filepath
 
 
 def md5Check(md5list, path):
@@ -90,16 +91,16 @@ def md5Check(md5list, path):
     return rlist
 
 
-def getExtracted(file,outpath):
-    compressed = zipfile.ZipFile(file,"r")
+def getExtracted(file, outpath):
+    compressed = zipfile.ZipFile(file, "r")
     try:
         for i in compressed.namelist():
-            compressed.extract(i,outpath)
+            compressed.extract(i, outpath)
     except:
         print("error extracting")
 
 
-def deleteNewFile(md5list,rlist):
+def deleteNewFile(md5list, rlist):
     deleted = []
     for i in rlist:
         if i not in md5list.keys():
@@ -108,20 +109,23 @@ def deleteNewFile(md5list,rlist):
     return deleted
 
 
-def recovery(inpath,outpath):
-    for i,j in getFileList(inpath),getFileList(outpath):
+# BUG, FIX LATER
+def recovery(inpath, outpath):
+    for i, j in getFileList(inpath), getFileList(outpath):
         try:
-            shutil.move(i,j)
+            shutil.move(i, j)
         except:
             print("error recovering file")
             continue
 
-def accurateRecovery(rlist,inpath,outpath):
-    for i,j in getFileList(inpath),getFileList(outpath):
-        if j in rlist:
-            try:
-                shutil.move(i,j)
-            except:
-                print("error recovering file")
-        else:
-            continue
+
+# BUG, FIX LATER
+def accurateRecovery(rlist, inpath, outpath):
+    i = getFileList(inpath)
+    o = getFileList(outpath)
+    for j in range(min(len(i), len(o))):
+        try:
+            if i[j] in rlist:
+                shutil.move(i[j], outpath)
+        except:
+            print("error recovering file")
