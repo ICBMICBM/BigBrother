@@ -3,6 +3,7 @@ import hashlib
 import zipfile
 import time
 import json
+import shutil
 
 '''
 libBigBrother version 0.0.1
@@ -89,4 +90,20 @@ def md5Check(md5list, path):
     return rlist
 
 
-def recovery()
+def getExtracted(file,outpath):
+    compressed = zipfile.ZipFile(file,"r")
+    try:
+        for i in compressed.namelist():
+            compressed.extract(i,outpath)
+    except:
+        print("error extracting")
+
+
+def deleteNewFile(md5list,rlist):
+    deleted = []
+    for i in rlist:
+        if i not in md5list.keys():
+            os.remove(i)
+            deleted.append(i)
+    return deleted
+
