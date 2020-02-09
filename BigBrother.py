@@ -107,3 +107,21 @@ def deleteNewFile(md5list,rlist):
             deleted.append(i)
     return deleted
 
+
+def recovery(inpath,outpath):
+    for i,j in getFileList(inpath),getFileList(outpath):
+        try:
+            shutil.move(i,j)
+        except:
+            print("error recovering file")
+            continue
+
+def accurateRecovery(rlist,inpath,outpath):
+    for i,j in getFileList(inpath),getFileList(outpath):
+        if j in rlist:
+            try:
+                shutil.move(i,j)
+            except:
+                print("error recovering file")
+        else:
+            continue
