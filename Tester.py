@@ -7,16 +7,17 @@ class MyTestCase(unittest.TestCase):
     def test1(self):
         targetfile = BigBrother.getFileList("/Users/icbm/Desktop/Test Folder")
         md5list = BigBrother.getmd5List(targetfile)
-        print(md5list)
-        path = BigBrother.getCompressed(targetfile,"/Users/icbm/Desktop/")
-        file = open("/Users/icbm/Desktop/Test Folder/sample.txt","w")
+        print("md5list:",md5list)
+        path = BigBrother.getCompressed(targetfile, "/Users/icbm/Desktop/")
+        file = open("/Users/icbm/Desktop/Test Folder/sample.txt", "a")
         file.write("an input")
         file.close()
-        print(BigBrother.md5Sum("/Users/icbm/Desktop/Test Folder/sample.txt"))
-        BigBrother.getExtracted(path,"/Users/icbm/Desktop")
-        targetlist = BigBrother.md5Check(md5list,"/Users/icbm/Desktop/Test Folder")
-        print(targetlist)
-        BigBrother.accurateRecovery(targetlist,"/Users/icbm/Desktop","/Users/icbm/Desktop/Test Folder")
+        print("md5 sum:",BigBrother.md5Sum("/Users/icbm/Desktop/Test Folder/sample.txt"))
+        BigBrother.getExtracted(path, "/Users/icbm/Desktop/out")
+        targetlist = BigBrother.md5Check(md5list, "/Users/icbm/Desktop/Test Folder")
+        print("target:",targetlist)
+        BigBrother.accurateRecovery(targetlist, "/Users/icbm/Desktop/out", "/Users/icbm/Desktop/Test Folder")
+
 
 if __name__ == '__main__':
     unittest.main()

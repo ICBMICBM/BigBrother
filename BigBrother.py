@@ -109,23 +109,11 @@ def deleteNewFile(md5list, rlist):
     return deleted
 
 
-# BUG, FIX LATER
-def recovery(inpath, outpath):
-    for i, j in getFileList(inpath), getFileList(outpath):
-        try:
-            shutil.move(i, j)
-        except:
-            print("error recovering file")
-            continue
-
-
-# BUG, FIX LATER
 def accurateRecovery(rlist, inpath, outpath):
-    i = getFileList(inpath)
-    o = getFileList(outpath)
-    for j in range(min(len(i), len(o))):
-        try:
-            if i[j] in rlist:
-                shutil.move(i[j], outpath)
-        except:
-            print("error recovering file")
+    inlist = getFileList(inpath)
+    outlist = getFileList(outpath)
+    for i in range(len(rlist)):
+        rlist[i] = os.path.join(inpath,rlist[i][1:])
+    for j in range(min(len(inlist), len(outlist))):
+        if inlist[j] in rlist:
+            os.replace(inlist[j], os.path.join(outpath,os.path.basename(inlist[j])))
