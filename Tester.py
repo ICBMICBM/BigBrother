@@ -5,18 +5,8 @@ import BigBrother
 
 class MyTestCase(unittest.TestCase):
     def test1(self):
-        targetfile = BigBrother.getFileList("/Users/icbm/Desktop/Test Folder")
-        md5list = BigBrother.getmd5List(targetfile)
-        print("md5list:",md5list)
-        path = BigBrother.getCompressed(targetfile, "/Users/icbm/Desktop/")
-        file = open("/Users/icbm/Desktop/Test Folder/sample.txt", "a")
-        file.write("an input")
-        file.close()
-        print("md5 sum:",BigBrother.md5Sum("/Users/icbm/Desktop/Test Folder/sample.txt"))
-        BigBrother.getExtracted(path, "/Users/icbm/Desktop/out")
-        targetlist = BigBrother.md5Check(md5list, "/Users/icbm/Desktop/Test Folder")
-        print("target:",targetlist)
-        BigBrother.accurateRecovery(targetlist, "/Users/icbm/Desktop/out", "/Users/icbm/Desktop/Test Folder")
+        file = "/Users/icbm/Desktop/1582099474.301064.tar.gz"
+        BigBrother.getExtracted(file,"/Users/icbm/Desktop")
 
 
 if __name__ == '__main__':

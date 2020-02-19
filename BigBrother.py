@@ -1,9 +1,8 @@
 import os
 import hashlib
-import zipfile
+import tarfile
 import time
 import json
-import shutil
 
 '''
 libBigBrother version 0.0.1
@@ -66,11 +65,11 @@ def readmd5List(file):
 def getCompressed(rlist, outpath):
     for i in rlist:
         i = os.path.basename(i)
-    filepath = outpath + str(time.time()) + ".zip"
-    compressed = zipfile.ZipFile(filepath, mode="w")
+    filepath = outpath + str(time.time()) + ".tar.gz"
+    compressed = tarfile.open(filepath, "x:gz")
     for i in rlist:
         try:
-            compressed.write(i, compress_type=zipfile.ZIP_DEFLATED)
+            compressed.add(i)
         except:
             print("error handling " + i)
             break
@@ -92,10 +91,9 @@ def md5Check(md5list, path):
 
 
 def getExtracted(file, outpath):
-    compressed = zipfile.ZipFile(file, "r")
+    compressed = tarfile.open(file)
     try:
-        for i in compressed.namelist():
-            compressed.extract(i, outpath)
+        compressed.extractall(path=outpath)
     except:
         print("error extracting")
 
