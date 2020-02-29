@@ -64,17 +64,20 @@ def getmd5List(rlist):
     return md5list
 
 
-def savemd5List(md5list):
+def savemd5List(outpath, md5list):
     """
     储存一个md5list
+    :param outpath: 输出目录
     :param md5list: 需要储存的md5list
-    :return: 无返回值
+    :return: 保存路径
     """
     dump = json.dumps(md5list)
     try:
-        md5file = open(".md5list.txt", "a")
+        savepath = os.path.join(outpath,"md5list.txt")
+        md5file = open(savepath, "a")
         md5file.write(dump)
         md5file.close()
+        return savepath
     except:
         print("error saving md5 list")
 
@@ -115,17 +118,26 @@ def getCompressed(rlist, outpath):
 
 
 # TODO need rework
-def md5Check(md5list, path):
-    rlist = []
+def md5Check(md5list:dict, path:str):
+    """
+    将一个目录下的文件与md5list中的文件对比，返回md5值改变的文件
+    :param md5list: getMd5list生成的字典
+    :param path: 需要进行对比的路径
+    :return: 被更改的文件列表 新增文件列表
+    """
+    changed = []
+    new = []
     checklist = getFileList(path)
     originlist = md5list
     newlist = getmd5List(checklist)
     for i in checklist:
         if originlist[i] == newlist[i]:
             continue
-        elif originlist[i] != newlist[i]:
-            rlist.append(i)
-    return rlist
+        elif originlist[i] != newlist[i] and newlist[i] in originlist.keys():
+            changed.append(i)
+        elif newlist[i] not in originlist.keys():
+            new.append(i)
+    return changed, new
 
 
 def getExtracted(file, outpath):
@@ -141,7 +153,7 @@ def getExtracted(file, outpath):
     except:
         print("error extracting")
 
-
+# 将在下个版本移除deleteNewFile
 def deleteNewFile(md5list, rlist):
     """
     删除不在md5list中的文件
