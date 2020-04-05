@@ -11,8 +11,6 @@ def main():
             BigBrother.accurateRecovery()
 
 
-
-
 def init(workingpath):
     parentdir = os.path.abspath(os.path.dirname(os.getcwd()))
     filelist = BigBrother.getFileList(workingpath)
