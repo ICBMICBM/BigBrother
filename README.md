@@ -1,9 +1,5 @@
 # BigBrother  
-
-## 0.Is this project running ?
-Sadly, nope.  
-The owner of this repo is lazy, but this project will be kept updating.  
-The owner is still working on functions of this project, and a executable version of BigBrother will be made ASAP.
+## BigBrother is working in progress.
 ## 1.What is BigBrother ?
 Project BigBrother is a file monitoring tool for AWD.  
 
