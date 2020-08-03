@@ -8,7 +8,9 @@ def main():
     while True:
         try:
             newmd5list = BigBrother.getmd5List(BigBrother.getFileList(workingpath))
-            BigBrother.accurateRecovery()
+            # BigBrother.accurateRecovery()
+        except:
+            print("")
 
 
 def init(workingpath):
@@ -18,4 +20,3 @@ def init(workingpath):
     BigBrother.savemd5List(parentdir, md5list)
     backupfile = BigBrother.getCompressed(filelist, parentdir)
     return backupfile,md5list
-

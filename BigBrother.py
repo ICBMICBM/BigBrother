@@ -10,7 +10,6 @@ By icbmicbm
 libBigBrother is the library needed by Project BigBrother.
 '''
 
-
 def getFile(path, rlist):
     """
     获取单个目录下的文件，此函数仅被getFileList调用
@@ -34,7 +33,10 @@ def getFileList(path):
     :return: 该路径下所有文件的列表
     """
     rlist = []
-    getFile(path, rlist)
+    try:
+        getFile(path, rlist)
+    except:
+        raise
     return rlist
 
 
@@ -73,13 +75,13 @@ def savemd5List(outpath, md5list):
     """
     dump = json.dumps(md5list)
     try:
-        savepath = os.path.join(outpath,"md5list.txt")
+        savepath = os.path.join(outpath,str(time.time())+" hash.txt")
         md5file = open(savepath, "a")
         md5file.write(dump)
         md5file.close()
         return savepath
-    except:
-        print("error saving md5 list")
+    except PermissionError:
+        print("Permission denied, error saving md5 list")
 
 
 def readmd5List(file):
@@ -89,11 +91,11 @@ def readmd5List(file):
     :return: 返回读取的md5列表
     """
     try:
-        md5list = open(file, "r")
-        md5list = json.loads(md5list)
+        with open(file, "r") as md5list:
+            md5list = json.loads(md5list)
         return md5list
-    except:
-        print("error reading md5 list")
+    except (PermissionError, FileNotFoundError):
+        print("Permission denied, can't read md5list")
 
 
 def getCompressed(rlist, outpath):
@@ -105,7 +107,7 @@ def getCompressed(rlist, outpath):
     """
     for i in rlist:
         i = os.path.basename(i)
-    filepath = outpath + str(time.time()) + ".tar.gz"
+    filepath = os.path.join(outpath,str(time.time()) + ".tar.gz")
     compressed = tarfile.open(filepath, "x:gz")
     for i in rlist:
         try:
@@ -117,7 +119,6 @@ def getCompressed(rlist, outpath):
     return filepath
 
 
-# TODO need rework
 def md5Check(md5list:dict, path:str):
     """
     将一个目录下的文件与md5list中的文件对比，返回md5值改变的文件
@@ -153,6 +154,7 @@ def getExtracted(file, outpath):
     except:
         print("error extracting")
 
+
 # 将在下个版本移除deleteNewFile
 def deleteNewFile(md5list, rlist):
     """
@@ -181,6 +183,7 @@ def accurateRecovery(rlist, inpath, outpath):
     outlist = getFileList(outpath)
     for i in range(len(rlist)):
         rlist[i] = os.path.join(inpath, rlist[i][1:])
-    for j in range(min(len(inlist), len(outlist))):
+    for j in range(min (len(inlist), len(outlist))):
         if inlist[j] in rlist:
             os.replace(inlist[j], os.path.join(outpath, os.path.basename(inlist[j])))
+

@@ -1,12 +1,16 @@
-import time
+import BigBrother2
 import unittest
-import BigBrother
 
 
 class MyTestCase(unittest.TestCase):
+    testPath = "/Users/icbm/Desktop/TestFolder"
+    DBPath = "./testdb"
+
     def test1(self):
-        file = "/Users/icbm/Desktop/1582099474.301064.tar.gz"
-        BigBrother.getExtracted(file,"/Users/icbm/Desktop")
+        BigBrother2.getFileList(self.testPath)
+
+    def test2(self):
+        BigBrother2.connectDB(self.DBPath)
 
 
 if __name__ == '__main__':
