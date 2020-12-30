@@ -1,5 +1,10 @@
 # BigBrother  
 ## BigBrother is working in progress.
+
+# 0.Recent Update
+
+moving from python to golang.
+
 ## 1.What is BigBrother ?
 Project BigBrother is a file monitoring tool for AWD.  
 
