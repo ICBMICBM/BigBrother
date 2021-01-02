@@ -2,3 +2,4 @@
 .DS_Store
 testdb
 __pycache__
+.vscode
